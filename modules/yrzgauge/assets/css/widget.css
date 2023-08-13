@@ -1,0 +1,15 @@
+div.dashboard-widget-yrzgauge {
+    display: grid;
+    grid-template-rows: 1fr;
+    padding: 0; 
+}
+
+div.dashboard-widget-yrzgauge .chart {
+    display: grid;
+    align-items: center;
+    justify-items: center; 
+}
+
+div.dashboard-widget-yrzgauge .chart canvas {
+ /*   background: white; */
+}

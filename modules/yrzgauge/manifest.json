@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2.0,
+    "id": "yrzgauge",
+    "type": "widget",
+    "name": "Gauge",
+    "namespace": "YrzGauge",
+    "version": "1.0",
+    "author": "Yeraz",
+    "actions": {
+        "widget.yrzgauge.view": {
+            "class": "WidgetView"
+        }
+    },
+    "widget": {
+        "js_class": "YrzGauge"
+    },
+    "assets": {
+        "css": ["widget.css"],
+        "js": ["class.widget.js"]        
+    }    
+}

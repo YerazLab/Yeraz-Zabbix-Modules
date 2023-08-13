@@ -1,2 +1,2 @@
 # ZabbixModules
-A bunch of custom Zabbix modules
+A bunch of custom Zabbix modules.
