@@ -4,12 +4,24 @@ div.dashboard-widget-yrzgauge {
     padding: 0; 
 }
 
-div.dashboard-widget-yrzgauge .chart {
+div.dashboard-widget-yrzgauge DIV {
     display: grid;
     align-items: center;
     justify-items: center; 
+}  
+
+.yrzgauge-title {
+    fill: #FFFFFF;
+    alignment-baseline: hanging;
+    text-anchor: middle;
 }
 
-div.dashboard-widget-yrzgauge .chart canvas {
- /*   background: white; */
+.yrzgauge-value {
+    fill: #FFFFFF;
+    alignment-baseline: hanging;
+    text-anchor: middle;    
+}
+
+.yrzgauge-gauge {
+    fill: #383838;
 }

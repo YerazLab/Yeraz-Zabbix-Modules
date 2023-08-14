@@ -99,20 +99,30 @@ class WidgetForm extends CWidgetForm {
 				]))
 					->setDefault(VALIGN_MIDDLE)
 					->setFlags(CWidgetField::FLAG_ACKNOWLEDGES)
+			)		
+			->addField(
+				(new CWidgetFieldCheckBox('adv_conf', _('Advanced configuration')))
 			)
 			->addField(
-				(new CWidgetFieldColor('color', _('Color')))
+				(new CWidgetFieldColor('gauge_color', _('Gauge color')))
 					->allowInherited()
 			)
 			->addField(
-				(new CWidgetFieldCheckBox('adv_conf', _('Advanced configuration')))
+				(new CWidgetFieldColor('value_color', _('Value color')))
+					->allowInherited()
 			)
 			->addField(
 				(new CWidgetFieldThresholds('thresholds', _('Thresholds')))
 			)
 			->addField(
+				(new CWidgetFieldIntegerBox('threshold_width', _('Treshold width')))
+					->setDefault(2)
+					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
+			)	
+			->addField(
 				(new CWidgetFieldIntegerBox('threshold_space', _('Treshold space')))
 					->setDefault(1)
+					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
 			)	
 			->addField(
 				(new CWidgetFieldSelect('thickness_select', _('Thickness'), [
@@ -134,7 +144,7 @@ class WidgetForm extends CWidgetForm {
 			)
 			->addField(
 				(new CWidgetFieldIntegerBox('title_text_size_value'))
-					->setDefault(12)
+					->setDefault(0)
 			)	
 			->addField(
 				(new CWidgetFieldSelect('value_text_size_select', _('Value text size'), [
@@ -145,7 +155,7 @@ class WidgetForm extends CWidgetForm {
 			)
 			->addField(
 				(new CWidgetFieldIntegerBox('value_text_size_value'))
-					->setDefault(24)
+					->setDefault(0)
 			);
 	}
 }

@@ -1,7 +1,7 @@
 <?php declare(strict_types = 0);
 
 namespace Modules\YrzGauge;
-x
+
 use Zabbix\Core\CWidget;
 
 class Widget extends CWidget {

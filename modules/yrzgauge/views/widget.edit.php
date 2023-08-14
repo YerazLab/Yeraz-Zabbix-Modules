@@ -74,18 +74,27 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
         new CWidgetFieldRadioButtonListView($data['fields']['vertical_align'])
     )
 	->addField(
-		new CWidgetFieldColorView($data['fields']['color'])
-	)
-	->addField(
 		new CWidgetFieldCheckBoxView($data['fields']['adv_conf']),
 		'adv-conf'
+	)
+	->addField(
+		(new CWidgetFieldColorView($data['fields']['gauge_color'])),
+		'adv-conf-item'
+	)
+	->addField(
+		(new CWidgetFieldColorView($data['fields']['value_color'])),
+		'adv-conf-item'
 	)
 	->addField(
 		(new CWidgetFieldThresholdsView($data['fields']['thresholds']))
 			->setHint(
 				makeWarningIcon(_('This setting applies only to numeric data.'))->setId('item-value-thresholds-warning')
 			),
-		'adv-conf-item',
+		'adv-conf-item'
+	)
+	->addField(
+		new CWidgetFieldIntegerBoxView($data['fields']['threshold_width']),
+		'adv-conf-item'
 	)
 	->addField(
 		new CWidgetFieldIntegerBoxView($data['fields']['threshold_space']),

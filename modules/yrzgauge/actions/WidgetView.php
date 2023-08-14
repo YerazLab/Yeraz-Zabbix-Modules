@@ -16,7 +16,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 
 		$items = API::Item()->get([
             'output' => ['itemid', 'value_type', 'name', 'units'],
-            'itemids' => $this->fields_vRalues['itemid'],
+            'itemids' => $this->fields_values['itemid'],
             'webitems' => true,
             'filter' => [
                 'value_type' => [ITEM_VALUE_TYPE_UINT64, ITEM_VALUE_TYPE_FLOAT]
