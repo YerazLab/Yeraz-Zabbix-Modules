@@ -12,8 +12,6 @@ class YrzGauge extends CWidget {
         this._valueText = null;
 
         this._valueFontSize = 0;
-
-        console.info('init');
     }   
 
     _processUpdateResponse(response) {
@@ -55,8 +53,8 @@ class YrzGauge extends CWidget {
             "title_text_size_value": response.fields_values.title_text_size_value,
             "units_select": response.fields_values.units_select,
             "units_value": response.fields_values.units_value,
-            //value_text_size_select: response.fields_values.value_text_size_select,
-            // "value_text_size_value": response.fields_values.value_text_size_value,
+            "value_text_size_select": response.fields_values.value_text_size_select,
+            "value_text_size_value": response.fields_values.value_text_size_value,
             "title": response.name
         }        
 
