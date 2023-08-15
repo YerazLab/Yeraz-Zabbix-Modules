@@ -53,28 +53,6 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(1)
 			)
 			->addField(
-				(new CWidgetFieldSelect('min_select', _('Min'), [
-					Widget::UNIT_AUTO => _x('Auto', 'history source selection method'),
-					Widget::UNIT_STATIC => _x('Static', 'history source selection method')
-				]))
-					->setDefault(Widget::UNIT_AUTO)
-			)
-			->addField(
-				(new CWidgetFieldIntegerBox('min_value'))
-					->setDefault(0)
-			)		
-			->addField(
-				(new CWidgetFieldSelect('max_select', _('Max'), [
-					Widget::UNIT_AUTO => _x('Auto', 'history source selection method'),
-					Widget::UNIT_STATIC => _x('Static', 'history source selection method')
-				]))
-					->setDefault(Widget::UNIT_AUTO)
-			)
-			->addField(
-				(new CWidgetFieldIntegerBox('max_value'))
-					->setDefault(100)
-			)	
-			->addField(
 				(new CWidgetFieldSelect('units_select', _('Units'), [
 					Widget::UNIT_AUTO => _x('Auto', 'history source selection method'),
 					Widget::UNIT_STATIC => _x('Static', 'history source selection method')
@@ -107,13 +85,13 @@ class WidgetForm extends CWidgetForm {
 			)
 			->addField(
 				(new CWidgetFieldIntegerBox('threshold_width', _('Treshold width')))
-					->setDefault(2)
-					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
+					->setDefault(8)
+					->setFlags(CWidgetField::FLAG_NOT_EMPTY)
 			)	
 			->addField(
 				(new CWidgetFieldIntegerBox('threshold_space', _('Treshold space')))
-					->setDefault(1)
-					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
+					->setDefault(2)
+					->setFlags(CWidgetField::FLAG_NOT_EMPTY)
 			)	
 			->addField(
 				(new CWidgetFieldSelect('thickness_select', _('Thickness'), [

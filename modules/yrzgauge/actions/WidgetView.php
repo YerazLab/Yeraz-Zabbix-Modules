@@ -4,15 +4,27 @@ namespace Modules\YrzGauge\Actions;
 
 use API,
 	CControllerDashboardWidgetView,
-	CControllerResponseData;
+	CControllerResponseData,
+    CRangeTimeParser,
+    CSettingsHelper;
 
 use Widgets\Item\Widget;
+use Widgets\YrzGauge\Includes\WidgetForm;
 
 use Zabbix\Core\CWidget;
 
 class WidgetView extends CControllerDashboardWidgetView {
 
-	protected function doAction(): void {
+	protected function init(): void {
+		parent::init();
+
+		$this->addValidationRules([
+			'from' => 'string',
+			'to' => 'string'
+		]);
+	}
+
+    protected function doAction(): void {
 
 		$items = API::Item()->get([
             'output' => ['itemid', 'value_type', 'name', 'units'],
@@ -23,39 +35,43 @@ class WidgetView extends CControllerDashboardWidgetView {
             ]
 		]);
 
-		$history_value = null;
-		$history_value_text = null;
-
 		if (!$items) {
 			$error = _('No permissions to referred object or it does not exist!');
 		} else {
 			$item = $items[0];
 
+            $range_time_parser = new CRangeTimeParser();
+
+            $range_time_parser->parse($this->getInput('from'));
+            $time_from = $range_time_parser->getDateTime(true)->getTimestamp();
+
+            $range_time_parser->parse($this->getInput('to'));
+            $time_to = $range_time_parser->getDateTime(false)->getTimestamp();    
+
+            $limit = CSettingsHelper::get(CSettingsHelper::SEARCH_LIMIT);
+            
             $history = API::History()->get([
-                'output' => API_OUTPUT_EXTEND,
+                'output' => ['value'],
                 'itemids' => $item['itemid'],
                 'history' => $item['value_type'],
                 'sortfield' => 'clock',
                 'sortorder' => ZBX_SORT_DOWN,
-                'limit' => 1
-            ]);
-
-            if ($history) {
-                $history_value = convertUnitsRaw([
-                    'value' => $history[0]['value'],
-                    'units' => $item['units']
-                ]);
-            }		
+				'time_from' => $time_from - 1,
+				'time_till' => $time_to + 1,
+                'limit' => $limit
+            ]);	
 		}
 
-
-		$this->setResponse(new CControllerResponseData([
-			'name' => $this->getInput('name', $this->widget->getName()),
-            'history' => $history_value,
+        $data = [
+            'name' => $this->getInput('name', $this->widget->getName()),
+            'units' => $item['units'],
+            'history' => $history, //_value,
             'fields_values' => $this->fields_values,
 			'user' => [
 				'debug_mode' => $this->getDebugMode()
 			]
-		]));
+        ];
+
+		$this->setResponse(new CControllerResponseData($data));
 	}
 }

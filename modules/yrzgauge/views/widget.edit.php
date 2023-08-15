@@ -4,13 +4,6 @@ use Modules\YrzGauge\Fields\CWidgetFieldThresholds;
 
 require_once dirname(__FILE__).'/../fields/CWidgetFieldThresholdsView.php';
 
-
-$min_select = new CWidgetFieldSelectView($data['fields']['min_select']);
-$min_value = (new CWidgetFieldIntegerBoxView($data['fields']['min_value']));
-
-$max_select = new CWidgetFieldSelectView($data['fields']['max_select']);
-$max_value = (new CWidgetFieldIntegerBoxView($data['fields']['max_value']));
-
 $units_select = new CWidgetFieldSelectView($data['fields']['units_select']);
 $units_value = (new CWidgetFieldTextBoxView($data['fields']['units_value']))
     ->setPlaceholder(_('value'))
@@ -39,20 +32,6 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
     ->addField(
         new CWidgetFieldSelectView($data['fields']['gauge_type'])
     )
-	->addItem([
-        $min_select->getLabel(),
-        new CFormField([
-            $min_select->getView()->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
-            $min_value->getView()
-        ])
-    ])
-    ->addItem([
-        $max_select->getLabel(),
-        new CFormField([
-            $max_select->getView()->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
-            $max_value->getView()
-        ])
-    ])
     ->addItem([
         $units_select->getLabel(),
         new CFormField([

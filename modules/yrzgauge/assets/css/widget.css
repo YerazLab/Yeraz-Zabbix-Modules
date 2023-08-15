@@ -29,6 +29,11 @@ div.dashboard-widget-yrzgauge {
     font-size: calc(var(--content-height) * 0.15 / 1.14);
 }
 
+.yrzgauge-value SPAN {
+    margin-left: 5px;
+    font-size: calc(var(--content-height) * 0.10 / 1.14);
+}
+
 .yrzgauge-gauge {
     fill: #383838;
 }

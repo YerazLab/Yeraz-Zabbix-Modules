@@ -7,21 +7,26 @@ class YrzGauge extends CWidget {
         this._container = null;
         this._svg = null;
         this._layout = null;
-        this._angles = {};
-
         this._units = null;
-        this._value = null;
+        this._history = [];
+        this._angles = {};
     }   
+
+	setTimePeriod(time_period) {
+		super.setTimePeriod(time_period);
+	}
+
+	_getUpdateRequestData() {
+		return {
+			...super._getUpdateRequestData(),
+			from: this._time_period.from,
+			to: this._time_period.to
+		};
+	}
 
     _processUpdateResponse(response) {
 
         this._configuration = {
-            "limits": { 
-                // max_select: response.fields_values.max_select,
-                "max": response.fields_values.max_value,
-                // min_select: response.fields_values.min_select,
-                "min": response.fields_values.min_value,
-            },
             "thresholds": {
                 "items": response.fields_values.thresholds,
                 "width": response.fields_values.threshold_width,
@@ -34,22 +39,28 @@ class YrzGauge extends CWidget {
             },
             "gaugeType": response.fields_values.gauge_type,
             "baseColor": response.fields_values.base_color,
-            "decimalsSelect": response.fields_values.decimals_select,
-            "decimalsValue": response.fields_values.decimals_value,
-            "thicknessSelect": response.fields_values.thickness_select,
-            "thicknessValue": response.fields_values.thickness_value,
-            "unitsSelect": response.fields_values.units_select,
-            "unitsValue": response.fields_values.units_value,
+            "decimals" : {
+                "select": response.fields_values.decimals_select,
+                "value": response.fields_values.decimals_value,
+            },
+            "thickness": {
+                "select": response.fields_values.thickness_select,
+                "value": response.fields_values.thickness_value,
+            },
+            "units" :{
+                "select": response.fields_values.units_select,
+                "value": response.fields_values.units_value,
+            },
             "title": response.name
         }        
 
         if (response.history === null) {
             this._units = null;
-            this._value = null;
+            this._history = [];
         }
         else {
-            this._units = response.history.units;
-            this._value = response.history.value;
+            this._units = response.units;
+            this._history = response.history;
         }
 
         this._getAngles();
@@ -83,8 +94,8 @@ class YrzGauge extends CWidget {
                 _to = 400;
                 break;
             case 3:
-                _from = 0; 
-                _to = 359.9;
+                _from = 180; 
+                _to = 539.9;
                 break;
         }
 
@@ -129,7 +140,7 @@ class YrzGauge extends CWidget {
         this._drawThresholds();
 
         const _space = this._configuration.show.markers ? this._configuration.thresholds.space : 0
-        const _width = this._configuration.thicknessSelect == 0 ? this._layout.width : this._configuration.thicknessValue;
+        const _width = this._configuration.thickness.select == 0 ? this._layout.width : this._configuration.thickness.value;
 
         this._drawArc(
             this._layout.x, 
@@ -149,20 +160,25 @@ class YrzGauge extends CWidget {
             this._layout.radius - _space, 
             _width, 
             this._angles.start, 
-            this._calculateAngle(this._value), 
+            this._calculateAngle(this._getValue()), 
             null, 
             this._getColor(),
             'yrzgauge-gauge-value'
         );
-    }     
+    }
+
+    _getValue() {
+        if (!this._history.length) return null;
+        return this._history[0].value;
+    }
 
     _getValueText(value) {
         if (value == null) return "-";
 
-        const _decimals = this._configuration.decimalsSelect == 0 ? 0 : this._configuration.decimalsValue;
-        const _units = this._configuration.unitsSelect == 0 ? this._units : this._configuration.unitsValue;
+        const _decimals = this._configuration.decimals.select == 0 ? 0 : this._configuration.decimals.value;
+        const _units = this._configuration.units.select == 0 ? this._units : this._configuration.units.value;
 
-        return parseFloat(value).toFixed(_decimals) + _units;    
+        return parseFloat(value).toFixed(_decimals) + "<span>" + _units + "</span>";    
 
     }
 
@@ -176,7 +192,7 @@ class YrzGauge extends CWidget {
     _drawValue() {
         const _value = this._container.querySelector('.yrzgauge-value');
 
-        _value.innerHTML = this._getValueText(this._value);
+        _value.innerHTML = this._getValueText(this._getValue());
         _value.style.display = (!this._configuration.show.value) ? 'none' : 'block';
         _value.style.color = '#' + this._getColor();
 
@@ -186,6 +202,12 @@ class YrzGauge extends CWidget {
         var _top = this._layout.y + ((this._layout.radius - this._layout.width) * Math.sin(this._angles.start)) +
                    parseInt(_styleContainer.paddingTop) -
                    parseInt(_styleValue.height);
+
+        if (this._configuration.gaugeType == 3) {
+            _top = (parseInt(_styleContainer.height) / 2) +
+                    parseInt(_styleContainer.paddingTop) -
+                   (parseInt(_styleValue.height) / 2);
+        }
 
         _value.style.top = parseInt(_top) + 'px';
     }
@@ -251,7 +273,7 @@ class YrzGauge extends CWidget {
         var _color = this._configuration.baseColor;
 
         for (var i = 0; i < this._configuration.thresholds.items.length; i++) {
-            if (this._value >= this._configuration.thresholds.items[i].threshold) {
+            if (this._getValue() >= this._configuration.thresholds.items[i].threshold) {
                 _color = this._configuration.thresholds.items[i].color;
             }
         }
@@ -294,11 +316,22 @@ class YrzGauge extends CWidget {
         }
     }
 
+    _getHistoryValue(max) {
+        return this._history.reduce((_prev, _curr) => {
+            return (max) ? 
+                (_prev.value > _curr.value ? _prev : _curr):
+                (_prev.value < _curr.value ? _prev : _curr);
+        }).value;
+    }
+
     _calculateAngle(value) {
+        const _min = 0;
+        const _max = 100;
+
         var _angle =
             this._angles.start
                 + (this._angles.end - this._angles.start)
-                    * ((value - this._configuration.limits.min) / (this._configuration.limits.max - this._configuration.limits.min));
+                    * ((value - _min) / (_max - _min));
 
         if (_angle < this._angles.start) {
             _angle = this._angles.start;

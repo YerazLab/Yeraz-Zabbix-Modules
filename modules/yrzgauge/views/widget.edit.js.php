@@ -13,14 +13,6 @@ window.widget_yrzgauge_form = new class {
 		this._advanced_configuration = document.getElementById('adv_conf');
 		this._advanced_configuration.addEventListener('change', () => this.updateForm());
 
-        this._min_select = document.getElementById('min_select');
-		this._min_select.addEventListener('change', () => this.updateForm());
-		this._min_value = document.getElementById('min_value');
-
-		this._max_select = document.getElementById('max_select');
-		this._max_select.addEventListener('change', () => this.updateForm());
-		this._max_value = document.getElementById('max_value');
-
 		this._units_select = document.getElementById('units_select');
 		this._units_select.addEventListener('change', () => this.updateForm());
 		this._units_value = document.getElementById('units_value');
@@ -83,8 +75,6 @@ window.widget_yrzgauge_form = new class {
 			element.style.display = this._advanced_configuration.checked ? '' : 'none';
 		}
 
-		this._min_value.disabled = this._min_select.value == <?= Widget::UNIT_AUTO ?>;
-		this._max_value.disabled = this._max_select.value == <?= Widget::UNIT_AUTO ?>;
 		this._units_value.disabled = this._units_select.value == <?= Widget::UNIT_AUTO ?>;
 		this._decimals_value.disabled = this._decimals_select.value == <?= Widget::UNIT_AUTO ?>;
 		this._thickness_value.disabled = this._thickness_select.value == <?= Widget::UNIT_AUTO ?>;

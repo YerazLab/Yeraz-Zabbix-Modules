@@ -16,5 +16,6 @@ use Modules\YrzGauge\Widget;
             ->addClass('yrzgauge')
     )
     ->setVar('history', $data['history'])
+    ->setVar('units', $data['units'])
     ->setVar('fields_values', $data['fields_values'])
     ->show();
