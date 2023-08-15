@@ -49,7 +49,7 @@ class YrzGauge extends CWidget {
         }
         else {
             this._units = response.history.units;
-            this._value = parseInt(response.history.value);
+            this._value = response.history.value;
         }
 
         if (this._svg === null) {
@@ -149,8 +149,18 @@ class YrzGauge extends CWidget {
     _drawValue() {
         const _value = this._container.querySelector('.yrzgauge-value');
 
-        _value.style.display = (!this._configuration.showValue) ? 'none' : 'block';
         _value.innerHTML = this._getValueText(this._value);
+        _value.style.display = (!this._configuration.showValue) ? 'none' : 'block';
+        _value.style.color = '#' + this._getColor();
+
+        const _styleContainer = window.getComputedStyle(this._container);
+        const _styleValue = window.getComputedStyle(_value);
+
+        var _top = this._layout.y + ((this._layout.radius - this._layout.width) * Math.sin(this._configuration.angles.start)) +
+                   parseInt(_styleContainer.paddingTop) -
+                   parseInt(_styleValue.height);
+
+        _value.style.top = parseInt(_top) + 'px';
     }
 
     _getSVGArc(x, y, radius, startAngle, endAngle, counterClockwise) {
@@ -303,9 +313,6 @@ class YrzGauge extends CWidget {
 
         var _outerRadiusV = _svgSize.height / (1 + _heightRatioV);
 
-   //     if (_outerRadiusV * _heightRatioV < this._configuration.margin + (this._valueFontSize / 2))
-    //        _outerRadiusV = _gaugeSize - this._configuration.margin - (this._valueFontSize / 2);
-
         const _maxRadiusV = _outerRadiusV - _thresholdWidth;
         var _radius = Math.min(_maxRadiusH, _maxRadiusV);
 
@@ -313,8 +320,6 @@ class YrzGauge extends CWidget {
         if (_width >= _radius) _width = Math.max(3, _radius / 3);
 
         const _outerRadius = _thresholdWidth + _radius;
-
- //       const _gaugeOuterHeight = Math.max(_outerRadius * (1 + _heightRatioV), _outerRadius + this._configuration.margin + (this._valueFontSize / 2));
         const _gaugeOuterHeight = Math.max(_outerRadius * (1 + _heightRatioV), _outerRadius);
 
         var _x = _gaugeSize / 2;

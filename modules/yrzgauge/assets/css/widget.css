@@ -24,10 +24,7 @@ div.dashboard-widget-yrzgauge {
 }
 
 .yrzgauge-value {
-    color: #FFFFFF;
     position: absolute;
-    bottom: 0;
-    margin-bottom: 20px;
     line-height: 100%;
     font-size: calc(var(--content-height) * 0.15 / 1.14);
 }
