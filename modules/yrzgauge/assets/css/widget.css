@@ -4,27 +4,35 @@ div.dashboard-widget-yrzgauge {
     padding: 0;
 }
 
-div.dashboard-widget-yrzgauge DIV {
+.yrzgauge {
     display: grid;
     align-items: center;
     justify-items: center; 
     box-sizing: content-box;
     padding: 10px;
+    position: relative;
 }  
 
 .yrzgauge-title {
-    fill: #FFFFFF;
-    alignment-baseline: hanging;
-    text-anchor: middle;
-
+    color: #FFFFFF;
+    position: absolute;
+    margin-top: 10px;
+    line-height: 100%;
+    top: 0;
+    font-size: calc(var(--content-height) * 0.14 / 1.14);
+    font-weight: 700;
 }
 
 .yrzgauge-value {
-    fill: #FFFFFF;
-    alignment-baseline: hanging;
-    text-anchor: middle;    
+    color: #FFFFFF;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 20px;
+    line-height: 100%;
+    font-size: calc(var(--content-height) * 0.15 / 1.14);
 }
 
 .yrzgauge-gauge {
     fill: #383838;
 }
+

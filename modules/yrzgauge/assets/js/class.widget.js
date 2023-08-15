@@ -10,17 +10,14 @@ class YrzGauge extends CWidget {
 
         this._units = null;
         this._value = null;
-        this._valueText = null;
     }   
 
     _processUpdateResponse(response) {
 
-        console.info(response);
-
         this._configuration = {
             "angles": {
-                "start": this._toRad(162),
-                "end": this._toRad(378)
+                "start": this._toRad(162), // 162 // 0 // 180 // 140
+                "end": this._toRad(378) // 378 // 359.9 // 360 // 400
             },
             "limits": { 
                 // max_select: response.fields_values.max_select,
@@ -28,49 +25,36 @@ class YrzGauge extends CWidget {
                 // min_select: response.fields_values.min_select,
                 "min": response.fields_values.min_value,
             },
-            "align": {
-                "horizontal": response.fields_values.horizontal_align,
-                "vertical": response.fields_values.vertical_align,
-            },
             "thresholds": {
                 "items": response.fields_values.thresholds,
                 "width": response.fields_values.threshold_width,
                 "space": response.fields_values.threshold_space
             },
             "padding": response.fields_values.padding,
-            "color": {
-                "gauge": response.fields_values.gauge_color,
-                "value": response.fields_values.value_color
-            },
+            "baseColor": response.fields_values.base_color,
             "decimals_select": response.fields_values.decimals_select,
             "decimals_value": response.fields_values.decimals_value,
             "showTitle": response.fields_values.show_title,
             "showValue": response.fields_values.show_value,
             "thickness_select": response.fields_values.thickness_select,
             "thickness_value": response.fields_values.thickness_value,
-            "title_text_size_select": response.fields_values.title_text_size_select,
-            "title_text_size_value": response.fields_values.title_text_size_value,
             "units_select": response.fields_values.units_select,
             "units_value": response.fields_values.units_value,
-            "value_text_size_select": response.fields_values.value_text_size_select,
-            "value_text_size_value": response.fields_values.value_text_size_value,
             "title": response.name
         }        
 
         if (response.history === null) {
             this._units = null;
             this._value = null;
-            this._valueText = null;
         }
         else {
             this._units = response.history.units;
             this._value = parseInt(response.history.value);
-            this._valueText = this._getValueText(response.history.value);
         }
 
         if (this._svg === null) {
             super._processUpdateResponse(response);
-            this._container = this._content_body.getElementsByTagName('div')[0];
+            this._container = this._content_body.querySelector('.yrzgauge');
         }
 
         this._resize();
@@ -88,9 +72,19 @@ class YrzGauge extends CWidget {
 
         var _style = window.getComputedStyle(this._container);
 
+        var _size = Math.min(
+            parseInt(_style.getPropertyValue("width")), 
+            parseInt(_style.getPropertyValue("height"))
+        );
+
         const _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-              _svg.setAttribute("width", parseInt(_style.getPropertyValue("width")));
-              _svg.setAttribute("height", parseInt(_style.getPropertyValue("height")));
+              _svg.setAttribute("width", _size);
+              _svg.setAttribute("height", _size);
+
+
+        this._container.style.setProperty(
+            '--content-height', _style.getPropertyValue("height")
+        );
 
         this._container.appendChild(_svg);
         this._svg = _svg;
@@ -98,8 +92,6 @@ class YrzGauge extends CWidget {
 
     _resize() {
         super.resize();
-
-        console.info('Resize');
 
         this._appendSVG();
 
@@ -137,17 +129,6 @@ class YrzGauge extends CWidget {
         );
     }     
 
-    _getSVGText(text, x, y, fontSize, className) {
-        const el = document.createElementNS("http://www.w3.org/2000/svg","text");
-              el.setAttributeNS(null,"x", x);     
-              el.setAttributeNS(null,"y", y);
-              el.setAttributeNS(null,"font-size", fontSize); 
-              el.setAttribute('class', className);
-              el.innerHTML = text;
-
-        this._svg.appendChild(el);
-    }
-
     _getValueText(value) {
         if (value == null) return "-";
 
@@ -159,33 +140,17 @@ class YrzGauge extends CWidget {
     }
 
     _drawTitle() {
-        if (!this._configuration.showTitle || this._configuration.title == null) return;
+        const _title = this._container.querySelector('.yrzgauge-title');
 
-        var _fontSize = this._container.clientHeight * (12 / 100 / 1.14);
-        
-        if (this._configuration.title_text_size_select == 1) _fontSize = this._configuration.title_text_size_value;
-
-        this._getSVGText(
-            this._configuration.title,
-            this._layout.gaugeSize /2,
-            12,
-            _fontSize,
-            'yrzgauge-title'
-        );
+        _title.style.display = (!this._configuration.showTitle || this._configuration.title == null) ? 'none' : 'block';
+        _title.innerHTML = this._configuration.title;
     }
 
     _drawValue() {
-        if (!this._configuration.showValue) return;
+        const _value = this._container.querySelector('.yrzgauge-value');
 
-        var _fontSize = this._container.clientHeight * (18 / 100 / 1.14);
-
-        this._getSVGText(
-            this._valueText,
-            this._layout.gaugeSize /2,
-            5 * this._layout.gaugeSize /8,
-            _fontSize,
-            'yrzgauge-value'
-        );
+        _value.style.display = (!this._configuration.showValue) ? 'none' : 'block';
+        _value.innerHTML = this._getValueText(this._value);
     }
 
     _getSVGArc(x, y, radius, startAngle, endAngle, counterClockwise) {
@@ -246,7 +211,7 @@ class YrzGauge extends CWidget {
     }
 
     _getColor() {
-        var _color = this._configuration.color.value;
+        var _color = this._configuration.baseColor;
 
         if (!this._configuration.thresholds.items.length) return _color;
 
@@ -265,7 +230,7 @@ class YrzGauge extends CWidget {
         var _angleFrom = this._configuration.angles.start;
 
         this._configuration.thresholds.items.unshift({
-            color: this._configuration.color.value,
+            color: this._configuration.baseColor,
             threshold: 0
         });
 

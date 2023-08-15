@@ -83,33 +83,11 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(0)
 			)
 			->addField(
-				(new CWidgetFieldRadioButtonList('horizontal_align', _('Horizontal align'), [
-					HALIGN_LEFT => _('Left'),
-					HALIGN_CENTER => _('Center'),
-					HALIGN_RIGHT => _('Right')
-				]))
-					->setDefault(HALIGN_CENTER)
-					->setFlags(CWidgetField::FLAG_ACKNOWLEDGES)
-			)		
-			->addField(
-				(new CWidgetFieldRadioButtonList('vertical_align', _('Vertical align'), [
-					VALIGN_TOP => _('Top'),
-					VALIGN_MIDDLE => _('Middle'),
-					VALIGN_BOTTOM => _('Bottom')
-				]))
-					->setDefault(VALIGN_MIDDLE)
-					->setFlags(CWidgetField::FLAG_ACKNOWLEDGES)
-			)		
-			->addField(
 				(new CWidgetFieldCheckBox('adv_conf', _('Advanced configuration')))
 			)
 			->addField(
-				(new CWidgetFieldColor('gauge_color', _('Gauge color')))
-					->allowInherited()
-			)
-			->addField(
-				(new CWidgetFieldColor('value_color', _('Value color')))
-					->allowInherited()
+				(new CWidgetFieldColor('base_color', _('Base color')))
+					->setDefault('3DC51D')
 			)
 			->addField(
 				(new CWidgetFieldThresholds('thresholds', _('Thresholds')))
@@ -134,28 +112,6 @@ class WidgetForm extends CWidgetForm {
 			->addField(
 				(new CWidgetFieldIntegerBox('thickness_value'))
 					->setDefault(10)
-			)
-			->addField(
-				(new CWidgetFieldSelect('title_text_size_select', _('Title text size'), [
-					Widget::UNIT_AUTO => _('Auto'),
-					Widget::UNIT_STATIC => _('Static')
-				]))
-					->setDefault(Widget::UNIT_AUTO)
-			)
-			->addField(
-				(new CWidgetFieldIntegerBox('title_text_size_value', null, 1, 100))
-					->setDefault(35)
-			)	
-			->addField(
-				(new CWidgetFieldSelect('value_text_size_select', _('Value text size'), [
-					Widget::UNIT_AUTO => _('Auto'),
-					Widget::UNIT_STATIC => _('Static')
-				]))
-					->setDefault(Widget::UNIT_AUTO)
-			)
-			->addField(
-				(new CWidgetFieldIntegerBox('value_text_size_value', null, 1, 100))
-					->setDefault(25)
 			);
 	}
 }

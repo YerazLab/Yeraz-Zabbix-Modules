@@ -35,14 +35,6 @@ window.widget_yrzgauge_form = new class {
 		this._thickness_select.addEventListener('change', () => this.updateForm());
 		this._thickness_value = document.getElementById('thickness_value');
 
-		this._title_size_select = document.getElementById('title_text_size_select');
-		this._title_size_select.addEventListener('change', () => this.updateForm());
-		this._title_size_value = document.getElementById('title_text_size_value');
-
-		this._value_size_select = document.getElementById('value_text_size_select');
-		this._value_size_select.addEventListener('change', () => this.updateForm());
-		this._value_size_value = document.getElementById('value_text_size_value');
-
 		this._colorpickerInit();
 		this.updateForm();
 	}
@@ -96,7 +88,5 @@ window.widget_yrzgauge_form = new class {
 		this._units_value.disabled = this._units_select.value == <?= Widget::UNIT_AUTO ?>;
 		this._decimals_value.disabled = this._decimals_select.value == <?= Widget::UNIT_AUTO ?>;
 		this._thickness_value.disabled = this._thickness_select.value == <?= Widget::UNIT_AUTO ?>;
-		this._title_size_value.disabled = this._title_size_select.value == <?= Widget::UNIT_AUTO ?>;
-		this._value_size_value.disabled = this._value_size_select.value == <?= Widget::UNIT_AUTO ?>;
 	}	
 };
