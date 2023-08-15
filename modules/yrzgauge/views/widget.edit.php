@@ -115,7 +115,8 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
 			$title_text_size_select->getLabel()->addClass('adv-conf-item'),
 			(new CFormField([
 				$title_text_size_select->getView()->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
-				$title_text_size_value->getView()
+				$title_text_size_value->getView(),
+				' %'
 			]))
 				->addClass('adv-conf-item')
 		]
@@ -125,7 +126,8 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
 			$value_text_size_select->getLabel()->addClass('adv-conf-item'),
 			(new CFormField([
 				$value_text_size_select->getView()->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
-				$value_text_size_value->getView()
+				$value_text_size_value->getView(),
+				' %'
 			]))
 				->addClass('adv-conf-item')
     	]

@@ -143,8 +143,8 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(Widget::UNIT_AUTO)
 			)
 			->addField(
-				(new CWidgetFieldIntegerBox('title_text_size_value'))
-					->setDefault(0)
+				(new CWidgetFieldIntegerBox('title_text_size_value', null, 1, 100))
+					->setDefault(35)
 			)	
 			->addField(
 				(new CWidgetFieldSelect('value_text_size_select', _('Value text size'), [
@@ -154,8 +154,8 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(Widget::UNIT_AUTO)
 			)
 			->addField(
-				(new CWidgetFieldIntegerBox('value_text_size_value'))
-					->setDefault(0)
+				(new CWidgetFieldIntegerBox('value_text_size_value', null, 1, 100))
+					->setDefault(25)
 			);
 	}
 }

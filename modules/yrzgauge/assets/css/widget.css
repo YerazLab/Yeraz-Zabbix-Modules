@@ -1,19 +1,22 @@
 div.dashboard-widget-yrzgauge {
     display: grid;
     grid-template-rows: 1fr;
-    padding: 0; 
+    padding: 0;
 }
 
 div.dashboard-widget-yrzgauge DIV {
     display: grid;
     align-items: center;
     justify-items: center; 
+    box-sizing: content-box;
+    padding: 10px;
 }  
 
 .yrzgauge-title {
     fill: #FFFFFF;
     alignment-baseline: hanging;
     text-anchor: middle;
+
 }
 
 .yrzgauge-value {
