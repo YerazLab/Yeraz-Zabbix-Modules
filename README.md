@@ -1,4 +1,4 @@
-# ZabbixModules
+# Yeraz Zabbix Modules
 
 A bunch of custom Zabbix modules.
 
