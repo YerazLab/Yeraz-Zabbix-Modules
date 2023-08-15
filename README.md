@@ -4,8 +4,7 @@ A bunch of custom Zabbix modules.
 
 ## Gauge
 
-A gauge widget with a lot a settings :
+A very simple gauge widget with a grafana look and feel and a lot of settings :
 
-![gauge settings](ressources/readme/settings.png)
+<img src="ressources/readme/gauges.png" />
 
-<img alt="VS Code in action" src="ressources/readme/settings.png">
