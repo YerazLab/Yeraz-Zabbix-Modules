@@ -40,6 +40,19 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(1)
 			)
 			->addField(
+				(new CWidgetFieldCheckBox('show_markers', _('Show markers')))
+					->setDefault(0)
+			)
+			->addField(
+				(new CWidgetFieldSelect('gauge_type', _('Gauge type'), [
+					0 => '180°',
+					1 => '216°',
+					2 => '260°',
+					3 => '360°'
+				]))
+					->setDefault(1)
+			)
+			->addField(
 				(new CWidgetFieldSelect('min_select', _('Min'), [
 					Widget::UNIT_AUTO => _x('Auto', 'history source selection method'),
 					Widget::UNIT_STATIC => _x('Static', 'history source selection method')

@@ -33,7 +33,13 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
     ->addField(
         new CWidgetFieldCheckBoxView($data['fields']['show_value'])
     )
-    ->addItem([
+    ->addField(
+        new CWidgetFieldCheckBoxView($data['fields']['show_markers'])
+    )
+    ->addField(
+        new CWidgetFieldSelectView($data['fields']['gauge_type'])
+    )
+	->addItem([
         $min_select->getLabel(),
         new CFormField([
             $min_select->getView()->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
