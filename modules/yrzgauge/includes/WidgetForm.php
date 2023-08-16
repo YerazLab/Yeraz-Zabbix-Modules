@@ -44,7 +44,7 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(0)
 			)
 			->addField(
-				(new CWidgetFieldSelect('gauge_type', _('Gauge type'), [
+				(new CWidgetFieldRadioButtonList('angle', _('Angle'), [
 					0 => '180°',
 					1 => '216°',
 					2 => '260°',
@@ -63,7 +63,7 @@ class WidgetForm extends CWidgetForm {
 				(new CWidgetFieldTextBox('units_value'))
 			)		
 			->addField(
-				(new CWidgetFieldSelect('decimals_select', _('Decimals'), [
+				(new CWidgetFieldSelect('decimals_select', _('Decimal places'), [
 					Widget::UNIT_AUTO => _('Auto'),
 					Widget::UNIT_STATIC => _('Static')
 				]))
@@ -75,6 +75,10 @@ class WidgetForm extends CWidgetForm {
 			)
 			->addField(
 				(new CWidgetFieldCheckBox('adv_conf', _('Advanced configuration')))
+			)
+			->addField(
+				(new CWidgetFieldColor('background_color', _('Background color')))
+					->setDefault('383838')
 			)
 			->addField(
 				(new CWidgetFieldColor('base_color', _('Base color')))
@@ -103,6 +107,10 @@ class WidgetForm extends CWidgetForm {
 			->addField(
 				(new CWidgetFieldIntegerBox('thickness_value'))
 					->setDefault(10)
+			)
+			->addField(
+				(new CWidgetFieldColor('title_color', _('Title color')))
+					->setDefault('FFFFFF')
 			);
 	}
 }

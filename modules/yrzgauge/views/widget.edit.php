@@ -29,9 +29,9 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
     ->addField(
         new CWidgetFieldCheckBoxView($data['fields']['show_markers'])
     )
-    ->addField(
-        new CWidgetFieldSelectView($data['fields']['gauge_type'])
-    )
+	->addField(
+		new CWidgetFieldRadioButtonListView($data['fields']['angle'])
+	)
     ->addItem([
         $units_select->getLabel(),
         new CFormField([
@@ -49,6 +49,10 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
 	->addField(
 		new CWidgetFieldCheckBoxView($data['fields']['adv_conf']),
 		'adv-conf'
+	)
+	->addField(
+		(new CWidgetFieldColorView($data['fields']['background_color'])),
+		'adv-conf-item'
 	)
 	->addField(
 		(new CWidgetFieldColorView($data['fields']['base_color'])),
@@ -78,7 +82,11 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
 			]))
 				->addClass('adv-conf-item')
     	]
-	)	
+	)
+	->addField(
+		(new CWidgetFieldColorView($data['fields']['title_color'])),
+		'adv-conf-item'
+	)
 	->includeJsFile('widget.edit.js.php')
 	->addJavaScript('widget_yrzgauge_form.init('.json_encode([
 		'color_palette' => CWidgetFieldThresholds::DEFAULT_COLOR_PALETTE,

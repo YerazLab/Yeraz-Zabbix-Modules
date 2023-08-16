@@ -25,8 +25,12 @@ class YrzGauge extends CWidget {
                 "value":   response.fields_values.show_value,
                 "markers": response.fields_values.show_markers,
             },
-            "gaugeType": response.fields_values.gauge_type,
-            "baseColor": response.fields_values.base_color,
+            "angle": response.fields_values.angle,
+            "colors": {
+                "base": response.fields_values.base_color,
+                "background": response.fields_values.background_color,
+                "title": response.fields_values.title_color,
+            },
             "decimals" : {
                 "select": response.fields_values.decimals_select,
                 "value":  response.fields_values.decimals_value,
@@ -72,12 +76,12 @@ class YrzGauge extends CWidget {
         var _from = 162;
         var _to = 378;
 
-        switch (this._configuration.gaugeType) {
+        switch (this._configuration.angle) {
             case 0:
                 _from = 180; 
                 _to = 360;
                 break;
-            case 1:
+            case 2:
                 _from = 140; 
                 _to = 400;
                 break;
@@ -142,7 +146,7 @@ class YrzGauge extends CWidget {
             _width, 
             this._angles.start, 
             this._angles.end, 
-            null,
+            this._configuration.colors.background,
             'yrzgauge-gauge-track'
         );
 
@@ -181,9 +185,10 @@ class YrzGauge extends CWidget {
         const _title = this._container.querySelector('.yrzgauge-title');
 
         _title.style.display = (!this._configuration.show.title || this._configuration.title == null) ? 'none' : 'block';
+        _title.style.color = '#' + this._configuration.colors.title;
         _title.innerHTML = this._configuration.title;
 
-        if (this._configuration.gaugeType != 3) {
+        if (this._configuration.angle != 3) {
             _title.style.marginBottom = 0;
         }
     }
@@ -208,7 +213,7 @@ class YrzGauge extends CWidget {
                    parseInt(_titleStyle.marginBottom) +
                    (_svgBound.top - _containerBound.top);
 
-        if (this._configuration.gaugeType == 3) {
+        if (this._configuration.angle == 3) {
             _top = (_svgBound.top - _containerBound.top) +
                    (parseInt(_svgBound.height) / 2) -
                    (parseInt(_styleValue.height) / 2);
@@ -274,7 +279,7 @@ class YrzGauge extends CWidget {
     }
 
     _getColor() {
-        var _color = this._configuration.baseColor;
+        var _color = this._configuration.colors.base;
 
         for (var i = 0; i < this._configuration.thresholds.items.length; i++) {
             if (this._getValue() >= this._configuration.thresholds.items[i].threshold) {
@@ -291,7 +296,7 @@ class YrzGauge extends CWidget {
         var _angleFrom = this._angles.start;
 
         this._configuration.thresholds.items.unshift({
-            color: this._configuration.baseColor,
+            color: this._configuration.colors.base,
             threshold: 0
         });
 

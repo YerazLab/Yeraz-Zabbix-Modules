@@ -15,7 +15,6 @@ div.dashboard-widget-yrzgauge {
 }  
 
 .yrzgauge-title {
-    color: #FFFFFF;
     line-height: 100%;
     font-size: calc(var(--content-height) * 0.14 / 1.14);
     font-weight: 700;
@@ -31,20 +30,4 @@ div.dashboard-widget-yrzgauge {
 .yrzgauge-value SPAN {
     margin-left: 5px;
     font-size: calc(var(--content-height) * 0.10 / 1.14);
-}
-
-.yrzgauge-gauge {
-
-}
-
-.yrzgauge-gauge-threshold {
-    
-}
-
-.yrzgauge-gauge-track {
-    fill: #383838;
-}
-
-.yrzgauge-gauge-value {
-
 }
