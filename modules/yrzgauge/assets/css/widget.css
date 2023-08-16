@@ -2,6 +2,7 @@ div.dashboard-widget-yrzgauge {
     display: grid;
     grid-template-rows: 1fr;
     padding: 0;
+    overflow: hidden;
 }
 
 .yrzgauge {
@@ -15,12 +16,10 @@ div.dashboard-widget-yrzgauge {
 
 .yrzgauge-title {
     color: #FFFFFF;
-    position: absolute;
-    margin-top: 10px;
     line-height: 100%;
-    top: 0;
     font-size: calc(var(--content-height) * 0.14 / 1.14);
     font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .yrzgauge-value {
@@ -35,6 +34,17 @@ div.dashboard-widget-yrzgauge {
 }
 
 .yrzgauge-gauge {
+
+}
+
+.yrzgauge-gauge-threshold {
+    
+}
+
+.yrzgauge-gauge-track {
     fill: #383838;
 }
 
+.yrzgauge-gauge-value {
+
+}

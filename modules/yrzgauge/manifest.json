@@ -12,8 +12,7 @@
         }
     },
     "widget": {
-        "js_class": "YrzGauge",
-        "use_time_selector": true
+        "js_class": "YrzGauge"
     },
     "assets": {
         "css": ["widget.css"],

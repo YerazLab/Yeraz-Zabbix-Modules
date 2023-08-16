@@ -12,18 +12,6 @@ class YrzGauge extends CWidget {
         this._angles = {};
     }   
 
-	setTimePeriod(time_period) {
-		super.setTimePeriod(time_period);
-	}
-
-	_getUpdateRequestData() {
-		return {
-			...super._getUpdateRequestData(),
-			from: this._time_period.from,
-			to: this._time_period.to
-		};
-	}
-
     _processUpdateResponse(response) {
 
         this._configuration = {
@@ -33,23 +21,23 @@ class YrzGauge extends CWidget {
                 "space": response.fields_values.threshold_space
             },
             "show": {
-                "title": response.fields_values.show_title,
-                "value": response.fields_values.show_value,
+                "title":   response.fields_values.show_title,
+                "value":   response.fields_values.show_value,
                 "markers": response.fields_values.show_markers,
             },
             "gaugeType": response.fields_values.gauge_type,
             "baseColor": response.fields_values.base_color,
             "decimals" : {
                 "select": response.fields_values.decimals_select,
-                "value": response.fields_values.decimals_value,
+                "value":  response.fields_values.decimals_value,
             },
             "thickness": {
                 "select": response.fields_values.thickness_select,
-                "value": response.fields_values.thickness_value,
+                "value":  response.fields_values.thickness_value,
             },
             "units" :{
                 "select": response.fields_values.units_select,
-                "value": response.fields_values.units_value,
+                "value":  response.fields_values.units_value,
             },
             "title": response.name
         }        
@@ -70,7 +58,7 @@ class YrzGauge extends CWidget {
             this._container = this._content_body.querySelector('.yrzgauge');
         }
 
-        this._resize();
+        this.resize();
     }
 
     _removeSVG() {
@@ -108,27 +96,32 @@ class YrzGauge extends CWidget {
     _appendSVG() {
         this._removeSVG();
 
-        var _style = window.getComputedStyle(this._container);
+        const _containerStyle = window.getComputedStyle(this._container);
 
-        var _size = Math.min(
-            parseInt(_style.getPropertyValue("width")), 
-            parseInt(_style.getPropertyValue("height"))
+        const _title = this._container.querySelector('.yrzgauge-title');
+        const _titleBound = _title.getBoundingClientRect();
+        const _titleStyle = window.getComputedStyle(_title);
+
+        const _size = Math.min(
+            parseInt(_containerStyle.getPropertyValue("width")), 
+            parseInt(_containerStyle.getPropertyValue("height")) - parseInt(_titleBound.height) - parseInt(_titleStyle.marginBottom)
         );
 
         const _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
               _svg.setAttribute("width", _size);
               _svg.setAttribute("height", _size);
+              _svg.setAttribute('class', 'yrzgauge-gauge');
 
 
         this._container.style.setProperty(
-            '--content-height', _style.getPropertyValue("height")
+            '--content-height', _containerStyle.getPropertyValue("height")
         );
 
         this._container.appendChild(_svg);
         this._svg = _svg;
     }
 
-    _resize() {
+    resize() {
         super.resize();
 
         this._appendSVG();
@@ -149,9 +142,8 @@ class YrzGauge extends CWidget {
             _width, 
             this._angles.start, 
             this._angles.end, 
-            null, 
-            'FFFFFF',
-            'yrzgauge-gauge'
+            null,
+            'yrzgauge-gauge-track'
         );
 
         this._drawArc(
@@ -161,10 +153,13 @@ class YrzGauge extends CWidget {
             _width, 
             this._angles.start, 
             this._calculateAngle(this._getValue()), 
-            null, 
             this._getColor(),
             'yrzgauge-gauge-value'
         );
+
+        if (this._state === WIDGET_STATE_ACTIVE) {
+            this._startUpdating();
+        }
     }
 
     _getValue() {
@@ -187,6 +182,10 @@ class YrzGauge extends CWidget {
 
         _title.style.display = (!this._configuration.show.title || this._configuration.title == null) ? 'none' : 'block';
         _title.innerHTML = this._configuration.title;
+
+        if (this._configuration.gaugeType != 3) {
+            _title.style.marginBottom = 0;
+        }
     }
 
     _drawValue() {
@@ -198,14 +197,20 @@ class YrzGauge extends CWidget {
 
         const _styleContainer = window.getComputedStyle(this._container);
         const _styleValue = window.getComputedStyle(_value);
+        const _containerBound = this._container.getBoundingClientRect();
+        const _svgBound = this._svg.getBoundingClientRect();
+        const _title = this._container.querySelector('.yrzgauge-title');
+        const _titleStyle = window.getComputedStyle(_title);
 
         var _top = this._layout.y + ((this._layout.radius - this._layout.width) * Math.sin(this._angles.start)) +
                    parseInt(_styleContainer.paddingTop) -
-                   parseInt(_styleValue.height);
+                   parseInt(_styleValue.height) -
+                   parseInt(_titleStyle.marginBottom) +
+                   (_svgBound.top - _containerBound.top);
 
         if (this._configuration.gaugeType == 3) {
-            _top = (parseInt(_styleContainer.height) / 2) +
-                    parseInt(_styleContainer.paddingTop) -
+            _top = (_svgBound.top - _containerBound.top) +
+                   (parseInt(_svgBound.height) / 2) -
                    (parseInt(_styleValue.height) / 2);
         }
 
@@ -230,7 +235,7 @@ class YrzGauge extends CWidget {
         ].join(" ");
     }
 
-    _drawArc(x, y, radius, width, startAngle, endAngle, strokeWidth = null, fillStyle = null, className) {
+    _drawArc(x, y, radius, width, startAngle, endAngle, fillStyle = null, className) {
 
         if (startAngle == endAngle) return;
 
@@ -263,7 +268,6 @@ class YrzGauge extends CWidget {
               el.setAttributeNS(null,"d", _d.join(" "));
               el.setAttribute('class', className);
 
-            if (strokeWidth != null) el.setAttribute('stroke-width', strokeWidth);
             if (fillStyle != null) el.setAttribute('fill', '#' + fillStyle);
       
         this._svg.appendChild(el);
@@ -308,20 +312,12 @@ class YrzGauge extends CWidget {
                 this._configuration.thresholds.width,
                 _angleFrom,
                 _angleTo,
-                null,
-                _color
+                _color,
+                'yrzgauge-gauge-threshold'
             );
 
             _angleFrom = _angleTo;
         }
-    }
-
-    _getHistoryValue(max) {
-        return this._history.reduce((_prev, _curr) => {
-            return (max) ? 
-                (_prev.value > _curr.value ? _prev : _curr):
-                (_prev.value < _curr.value ? _prev : _curr);
-        }).value;
     }
 
     _calculateAngle(value) {
@@ -349,14 +345,13 @@ class YrzGauge extends CWidget {
     }    
 
     _toRad(angle) {
-        // return angle * Math.PI;
         return angle * (Math.PI / 180);
     }
 
     _calculLayout() {
 
-        const _svgSize = this._svg.getBoundingClientRect();
-        const _gaugeSize = Math.min(_svgSize.width, _svgSize.height);
+        const _svgBound = this._svg.getBoundingClientRect();
+        const _gaugeSize = Math.min(_svgBound.width, _svgBound.height);
         const _thresholdWidth = (this._configuration.show.markers) ? this._configuration.thresholds.width : 0;
         const _maxRadiusH = (_gaugeSize / 2) - _thresholdWidth;
         const _angle = ((this._angles.end - this._angles.start) / 100);
@@ -369,7 +364,7 @@ class YrzGauge extends CWidget {
 
         _heightRatioV = Math.max(_heightRatioV, Math.sin(this._angles.end));
 
-        var _outerRadiusV = _svgSize.height / (1 + _heightRatioV);
+        var _outerRadiusV = _svgBound.height / (1 + _heightRatioV);
 
         const _maxRadiusV = _outerRadiusV - _thresholdWidth;
         var _radius = Math.min(_maxRadiusH, _maxRadiusV);
@@ -383,14 +378,13 @@ class YrzGauge extends CWidget {
         var _x = _gaugeSize / 2;
         var _y = _thresholdWidth + _radius;
 
-        const _blank = _svgSize.height - _gaugeOuterHeight;
+        const _blank = _svgBound.height - _gaugeOuterHeight;
         const _offsetY = (_blank / 2);
 
         _y += _offsetY;
 
         return {
             "width": _width,
-            "gaugeSize": _gaugeSize,
             "radius": _radius,
             "x": _x,
             "y": _y

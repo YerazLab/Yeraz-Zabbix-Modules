@@ -85,7 +85,7 @@ class WidgetForm extends CWidgetForm {
 			)
 			->addField(
 				(new CWidgetFieldIntegerBox('threshold_width', _('Treshold width')))
-					->setDefault(8)
+					->setDefault(2)
 					->setFlags(CWidgetField::FLAG_NOT_EMPTY)
 			)	
 			->addField(
