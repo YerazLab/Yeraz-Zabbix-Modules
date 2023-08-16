@@ -44,6 +44,18 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(0)
 			)
 			->addField(
+				(new CWidgetFieldCheckBox('show_needle', _('Show needle')))
+					->setDefault(0)
+			)
+			->addField(
+				(new CWidgetFieldRadioButtonList('show_progress', _('Show progress'), [
+					0 => _('No'),
+					1 => _('Yes'),
+					2 => _('Faded')
+				]))
+					->setDefault(1)
+			)
+			->addField(
 				(new CWidgetFieldRadioButtonList('angle', _('Angle'), [
 					0 => '180°',
 					1 => '216°',
@@ -110,6 +122,10 @@ class WidgetForm extends CWidgetForm {
 			)
 			->addField(
 				(new CWidgetFieldColor('title_color', _('Title color')))
+					->setDefault('FFFFFF')
+			)
+			->addField(
+				(new CWidgetFieldColor('needle_color', _('Needle color')))
 					->setDefault('FFFFFF')
 			);
 	}

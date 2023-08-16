@@ -14,37 +14,42 @@ class YrzGauge extends CWidget {
 
     _processUpdateResponse(response) {
 
+        const fields = response.fields_values;
+
         this._configuration = {
             "thresholds": {
-                "items": response.fields_values.thresholds,
-                "width": response.fields_values.threshold_width,
-                "space": response.fields_values.threshold_space
+                "items":      fields.thresholds,
+                "width":      fields.threshold_width,
+                "space":      fields.threshold_space
             },
             "show": {
-                "title":   response.fields_values.show_title,
-                "value":   response.fields_values.show_value,
-                "markers": response.fields_values.show_markers,
+                "title":      fields.show_title,
+                "value":      fields.show_value,
+                "markers":    fields.show_markers,
+                "needle":     fields.show_needle,
+                "progress":   fields.show_progress,
             },
-            "angle": response.fields_values.angle,
+            "angle":          fields.angle,
             "colors": {
-                "base": response.fields_values.base_color,
-                "background": response.fields_values.background_color,
-                "title": response.fields_values.title_color,
+                "base":       this._default(fields.base_color, '009100'),
+                "background": this._default(fields.background_color, '383838'),
+                "title":      this._default(fields.title_color, 'FFFFFF'),
+                "needle":     fields.needle_color,
             },
             "decimals" : {
-                "select": response.fields_values.decimals_select,
-                "value":  response.fields_values.decimals_value,
+                "select":     fields.decimals_select,
+                "value":      fields.decimals_value,
             },
             "thickness": {
-                "select": response.fields_values.thickness_select,
-                "value":  response.fields_values.thickness_value,
+                "select":     fields.thickness_select,
+                "value":      fields.thickness_value,
             },
             "units" :{
-                "select": response.fields_values.units_select,
-                "value":  response.fields_values.units_value,
+                "select":     fields.units_select,
+                "value":      fields.units_value,
             },
             "title": response.name
-        }        
+        }
 
         if (response.history === null) {
             this._units = null;
@@ -97,6 +102,10 @@ class YrzGauge extends CWidget {
         }
     }
 
+    _default(value, defaultValue) {
+        return (value == null || value == '' || value == undefined) ? defaultValue : value;
+    }
+
     _appendSVG() {
         this._removeSVG();
 
@@ -146,24 +155,53 @@ class YrzGauge extends CWidget {
             _width, 
             this._angles.start, 
             this._angles.end, 
-            this._configuration.colors.background,
+            '#' + this._configuration.colors.background,
             'yrzgauge-gauge-track'
         );
 
-        this._drawArc(
-            this._layout.x, 
-            this._layout.y, 
-            this._layout.radius - _space, 
-            _width, 
-            this._angles.start, 
-            this._calculateAngle(this._getValue()), 
-            this._getColor(),
-            'yrzgauge-gauge-value'
-        );
+        if (this._configuration.show.progress != 0) {
+
+
+            var _color = this._getColor();
+            if (this._configuration.show.progress == 2) {
+                const _rgb = this._hexToRgb(_color);
+                _color = "rgba(" + _rgb.r + "," + _rgb.g + "," + _rgb.b + ",0.25)";
+            }
+
+            this._drawArc(
+                this._layout.x, 
+                this._layout.y, 
+                this._layout.radius - _space, 
+                _width, 
+                this._angles.start, 
+                this._calculateAngle(this._getValue()), 
+                _color,
+                'yrzgauge-gauge-value'
+            );
+        }
+
+        this._drawNeedle();
 
         if (this._state === WIDGET_STATE_ACTIVE) {
             this._startUpdating();
         }
+    }
+
+    _hexToRgb(hex){
+        var _c;
+        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+            _c = hex.substring(1).split('');
+            if (_c.length == 3) {
+                _c = [_c[0], _c[0], _c[1], _c[1], _c[2], _c[2]];
+            }
+            _c = '0x' + _c.join('');
+            return {
+                'r': (_c >> 16) & 255,
+                'g': (_c >> 8) & 255,
+                'b': _c & 255
+            };
+        }
+        return null;
     }
 
     _getValue() {
@@ -198,7 +236,7 @@ class YrzGauge extends CWidget {
 
         _value.innerHTML = this._getValueText(this._getValue());
         _value.style.display = (!this._configuration.show.value) ? 'none' : 'block';
-        _value.style.color = '#' + this._getColor();
+        _value.style.color = this._getColor();
 
         const _styleContainer = window.getComputedStyle(this._container);
         const _styleValue = window.getComputedStyle(_value);
@@ -219,7 +257,36 @@ class YrzGauge extends CWidget {
                    (parseInt(_styleValue.height) / 2);
         }
 
+        if (this._configuration.show.needle) {
+            switch (this._configuration.angle) {
+                case 0: _top += 20; break;
+                case 1: _top += 20; break;
+                case 2: _top += 10; break;
+                case 3: _top += -15; break;
+            }
+        }
+
         _value.style.top = parseInt(_top) + 'px';
+    }
+
+    _getSVGNeedle() {
+        const _height = this._layout.radius - 5;
+
+        const _d = [
+            "M", 5, _height,
+            "L", 0, 0, 
+            "L", -5, _height, 
+            "A", 5, 5, 0, 1, 0, 5, _height, 
+            "Z"
+        ].join(" ");
+
+        const color = (this._configuration.colors.needle != '') ? '#' + this._configuration.colors.needle : this._getColor()
+
+        const el = document.createElementNS("http://www.w3.org/2000/svg","path");
+              el.setAttributeNS(null,"d", _d);
+              el.setAttributeNS(null,"fill", color);
+
+        return el;
     }
 
     _getSVGArc(x, y, radius, startAngle, endAngle, counterClockwise) {
@@ -238,6 +305,22 @@ class YrzGauge extends CWidget {
         return [
             "L", x , y
         ].join(" ");
+    }
+
+    _drawNeedle() {
+        if (!this._configuration.show.needle) return;
+
+        const _angle = (this._toDegree(this._calculateAngle(this._getValue()))) - 270;
+        
+        const el = document.createElementNS("http://www.w3.org/2000/svg","g");
+              el.setAttributeNS(null,"transform-origin", "0 " + (this._layout.radius));
+              el.setAttributeNS(null,"transform", 
+                                        "translate(" + this._layout.x + "," + (this._layout.y - this._layout.radius) + ") " +
+                                        "rotate(" + _angle + ", 0, 0)");
+
+              el.appendChild(this._getSVGNeedle());
+
+        this._svg.appendChild(el);
     }
 
     _drawArc(x, y, radius, width, startAngle, endAngle, fillStyle = null, className) {
@@ -273,7 +356,7 @@ class YrzGauge extends CWidget {
               el.setAttributeNS(null,"d", _d.join(" "));
               el.setAttribute('class', className);
 
-            if (fillStyle != null) el.setAttribute('fill', '#' + fillStyle);
+            if (fillStyle != null) el.setAttribute('fill', fillStyle);
       
         this._svg.appendChild(el);
     }
@@ -287,7 +370,7 @@ class YrzGauge extends CWidget {
             }
         }
 
-        return _color;
+        return '#' + _color;
     }    
 
     _drawThresholds() {
@@ -317,7 +400,7 @@ class YrzGauge extends CWidget {
                 this._configuration.thresholds.width,
                 _angleFrom,
                 _angleTo,
-                _color,
+                '#' + _color,
                 'yrzgauge-gauge-threshold'
             );
 
@@ -351,6 +434,10 @@ class YrzGauge extends CWidget {
 
     _toRad(angle) {
         return angle * (Math.PI / 180);
+    }
+
+    _toDegree(angle) {
+        return angle * (180 / Math.PI);
     }
 
     _calculLayout() {

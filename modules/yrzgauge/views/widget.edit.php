@@ -29,6 +29,12 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
     ->addField(
         new CWidgetFieldCheckBoxView($data['fields']['show_markers'])
     )
+    ->addField(
+        new CWidgetFieldCheckBoxView($data['fields']['show_needle'])
+    )
+	->addField(
+		new CWidgetFieldRadioButtonListView($data['fields']['show_progress'])
+	)
 	->addField(
 		new CWidgetFieldRadioButtonListView($data['fields']['angle'])
 	)
@@ -85,6 +91,10 @@ $thickness_value = (new CWidgetFieldIntegerBoxView($data['fields']['thickness_va
 	)
 	->addField(
 		(new CWidgetFieldColorView($data['fields']['title_color'])),
+		'adv-conf-item'
+	)
+	->addField(
+		(new CWidgetFieldColorView($data['fields']['needle_color'])),
 		'adv-conf-item'
 	)
 	->includeJsFile('widget.edit.js.php')
