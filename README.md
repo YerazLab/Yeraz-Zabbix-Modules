@@ -15,7 +15,7 @@ A very simple gauge widget with a grafana look and feel and a lot of settings.
 ## Theme
 
 Unfortunately Zabbix dont give any option to retrieve the palette of the current theme. You can change the title and track color in the
-[widget.css](assets/css/widget.css).
+[widget.css](modules/yrzgauge/assets/css/widget.css).
 
 ```
 .yrzgauge-title {
@@ -30,7 +30,7 @@ Unfortunately Zabbix dont give any option to retrieve the palette of the current
 
 # Installation
 
-* Copy only the each module folder (ex. **yrzgauge**) in your Zabbix modules directory (/usr/local/zabbix/modules)
+* Copy only the each module folder (ex. **[yrzgauge](modules/)**) in your Zabbix modules directory (/usr/local/zabbix/modules)
 * Go to the menu **Administration / General / Modules**
 * Click on the button **Scan Directory** on the top right
 * Click on the link **enabled** on the right of the module you added
