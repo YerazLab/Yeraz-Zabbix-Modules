@@ -8,7 +8,7 @@ This modules has only tested with Zabbix 6.4.
 
 # Gauge
 
-A very simple gauge widget with a grafana look and feel and a lot of settings.
+A very simple gauge widget with a grafana look and feel, needle and a lot of cool settings.
 
 <img src="ressources/readme/gauges.png" width="250" style="margin-bottom:20px" />
 
