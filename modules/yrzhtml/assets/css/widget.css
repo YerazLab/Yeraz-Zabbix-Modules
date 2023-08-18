@@ -1,0 +1,5 @@
+div.dashboard-widget-yrzhtml {
+    display: grid;
+    grid-template-rows: 1fr;
+    padding: 0;
+}

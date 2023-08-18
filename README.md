@@ -19,6 +19,10 @@ Change dashboard settings like padding, margin and colors.
 
 <img src="ressources/readme/enhanced.gif" width="500" style="margin-bottom:20px" />
 
+# Text
+
+A simple but missing widget in Zabbix to display a text on the dashboard.
+
 
 # Installation
 

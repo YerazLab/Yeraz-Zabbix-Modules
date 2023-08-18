@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2.0,
+    "id": "yrzhtml",
+    "type": "widget",
+    "name": "Yeraz | HTML",
+    "namespace": "YrzHtml",
+    "version": "1.0",
+    "author": "Yeraz",
+	"widget": {
+		"js_class": "YrzHtml"
+    },    
+    "actions": {
+        "widget.yrzhtml.view": {
+            "class": "WidgetView"
+        }
+    },    
+    "assets": {
+        "css": ["widget.css"],
+        "js": ["class.widget.js"]        
+    }
+}
