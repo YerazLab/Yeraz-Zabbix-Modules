@@ -19,9 +19,9 @@ Change dashboard settings like padding, margin and colors.
 
 <img src="ressources/readme/enhanced.gif" width="500" style="margin-bottom:20px" />
 
-# Text
+# HTML (WIP)
 
-A simple but missing widget in Zabbix to display a text on the dashboard.
+A simple but missing widget in Zabbix to display an HTML code (a simple code like a H1 or a complex structure) on the dashboard.
 
 
 # Installation
