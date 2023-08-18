@@ -13,9 +13,12 @@ A very simple gauge widget with a grafana look and feel, needle and a lot of coo
 <img src="ressources/readme/gauges.png" width="250" style="margin-bottom:20px" />
 
 
-# Enhancer
+# Dashboard Enhancer
 
 Change dashboard settings like padding, margin and colors.
+
+<img src="ressources/readme/enhanced.gif" width="500" style="margin-bottom:20px" />
+
 
 # Installation
 
