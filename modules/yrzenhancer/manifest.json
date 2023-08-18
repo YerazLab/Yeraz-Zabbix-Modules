@@ -1,21 +1,26 @@
 {
     "manifest_version": 2.0,
-    "id": "yrzgauge",
+    "id": "yrzenhancer",
     "type": "widget",
-    "name": "Yeraz | Gauge",
-    "namespace": "YrzGauge",
+    "name": "Yeraz | Enhancer",
+    "namespace": "YrzEnhancer",
     "version": "1.0",
     "author": "Yeraz",
+	"widget": {
+		"template_support": true,
+		"size": {
+			"width": 2,
+			"height": 1
+		},
+		"js_class": "YrzEnhancer"
+    },
     "actions": {
-        "widget.yrzgauge.view": {
+        "widget.yrzenhancer.view": {
             "class": "WidgetView"
         }
-    },
-    "widget": {
-        "js_class": "YrzGauge"
     },    
     "assets": {
         "css": ["widget.css"],
         "js": ["class.widget.js"]        
-    }    
+    }
 }

@@ -10,7 +10,12 @@ This modules has only tested with Zabbix 6.4.
 
 A very simple gauge widget with a grafana look and feel and a lot of settings.
 
-<img src="ressources/readme/gauges.png" width="250"  />
+<img src="ressources/readme/gauges.png" width="250" style="margin-bottom:20px" />
+
+
+# Enhancer
+
+Change dashboard settings like padding, margin and colors.
 
 # Installation
 
