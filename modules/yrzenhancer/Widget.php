@@ -7,6 +7,6 @@ use Zabbix\Core\CWidget;
 class Widget extends CWidget {
 
 	public function getDefaultName(): string {
-		return _('Yeraz | Enhancer');
+		return _('Yeraz | Dashboard enhancer');
 	}
 }

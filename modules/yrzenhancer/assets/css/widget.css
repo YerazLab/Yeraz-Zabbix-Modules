@@ -2,7 +2,11 @@ div.dashboard-widget-yrzenhancer {
     display: grid;
     grid-template-rows: 1fr;
     padding: 0;
-    background-color: crimson;
     align-items: center;
     justify-items: center;
+}
+
+div.dashboard-widget-yrzenhancer IMG {
+    width: 50px;
+    height: 50px;
 }

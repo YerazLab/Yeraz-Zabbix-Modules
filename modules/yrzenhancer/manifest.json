@@ -2,7 +2,7 @@
     "manifest_version": 2.0,
     "id": "yrzenhancer",
     "type": "widget",
-    "name": "Yeraz | Enhancer",
+    "name": "Yeraz | Dashboard enhancer",
     "namespace": "YrzEnhancer",
     "version": "1.0",
     "author": "Yeraz",

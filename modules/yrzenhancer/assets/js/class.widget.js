@@ -4,11 +4,15 @@ class YrzEnhancer extends CWidget {
         super._init();
 
         this._configuration = null;
-        this._container = null;
         this._style = null;
     }   
 
+    _setMode(edit) {
+        this._content_body.parentNode.style.display = (edit == true) ? 'block' : 'none';
+    }
+
     _processUpdateResponse(response) {
+        console.info('_processUpdateResponse');
 
         const fields = response.fields_values;
 
@@ -35,7 +39,8 @@ class YrzEnhancer extends CWidget {
         }
 
         super._processUpdateResponse(response);
-        this._container = this._content_body.querySelector('.yrzenhancer');
+
+        this._setMode(this._is_edit_mode);
 
         this._processCss();
     }
@@ -75,7 +80,6 @@ class YrzEnhancer extends CWidget {
     }
 
     _processCss() {
-        console.info(this._configuration);
 
         if (this._configuration.enable) {
 
@@ -117,6 +121,13 @@ class YrzEnhancer extends CWidget {
         } else {
             this._removeStyle();
         }
+
+        const _divs = this._content_body.parentNode.querySelectorAll('div');
+
+        this._content_body.style.border = 'none';
+        _divs[0].style.backgroundColor = "#6C353A";
+        _divs[1].style.backgroundColor = "#B63F4B";
+
     }
 
     _appendStyle(style) {
@@ -129,5 +140,11 @@ class YrzEnhancer extends CWidget {
         if (this._style == null) return;
         document.getElementsByTagName('HEAD')[0].removeChild(this._style);
         this._style = null;
+    }
+
+    setEditMode() {
+        console.info('setEditMode');
+        super.setEditMode();
+        this._setMode(this._is_edit_mode);
     }
 }
