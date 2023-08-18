@@ -15,7 +15,7 @@ A very simple gauge widget with a grafana look and feel, needle and a lot of coo
 
 # Dashboard Enhancer
 
-Change dashboard settings like padding, margin and colors.
+Change dashboard settings like padding, margin and colors. Check the gif below (don't see the gif? wait, it's not loaded yet!)
 
 <img src="ressources/readme/enhanced.gif" width="500" style="margin-bottom:20px" />
 
