@@ -29,6 +29,8 @@ class YrzEnhancer extends CWidget {
                     "color": this._default(fields.widget_background_color, "transparent"),
                 },
                 "border": {
+                    "width": fields.widget_border_width,
+                    "style": fields.widget_border_style,
                     "color": this._default(fields.widget_border_color, "transparent"),
                     "show": fields.widget_border_show
                 },
@@ -49,6 +51,21 @@ class YrzEnhancer extends CWidget {
 
     _getColor(color) {
         return (color == 'transparent') ? color : '#' + color;
+    }
+
+    _getBorderStyle(style) {
+        switch (style) {
+            case 0: return 'Dotted';
+            case 1: return 'Dashed';
+            case 2: return 'Solid';
+            case 3: return 'Double';
+            case 4: return 'Groove';
+            case 5: return 'Ridge';
+            case 6: return 'Inset';
+            case 7: return 'Outset';
+            case 8: return 'None';
+            case 9: return 'Hidden';
+        }
     }
 
     _iterateStyles(rules) {
@@ -91,7 +108,11 @@ class YrzEnhancer extends CWidget {
                     ],
                     'div.dashboard-grid-widget-container': [
                         { 'margin': this._configuration.widget.margin + 'px' },
-                        { 'border': (!this._configuration.widget.border.show) ? 'none' : '1px solid ' + this._getColor(this._configuration.widget.border.color) },
+                        { 'border': (!this._configuration.widget.border.show) ? 'none' : 
+                                            this._configuration.widget.border.width + 'px ' + 
+                                            this._getBorderStyle(this._configuration.widget.border.style) + ' ' + 
+                                            this._getColor(this._configuration.widget.border.color) 
+                        },
                         { 'padding': '0' }
                     ],
                     'div.dashboard-grid-widget-head': [

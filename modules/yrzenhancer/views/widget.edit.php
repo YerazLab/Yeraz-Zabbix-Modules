@@ -14,6 +14,12 @@
 		(new CWidgetFieldColorView($data['fields']['widget_background_color']))
 	)
 	->addField(
+		(new CWidgetFieldIntegerBoxView($data['fields']['widget_border_width']))
+	)	
+	->addField(
+		(new CWidgetFieldSelectView($data['fields']['widget_border_style']))
+	)	
+	->addField(
 		(new CWidgetFieldColorView($data['fields']['widget_border_color']))
 	)
 	->addField(
